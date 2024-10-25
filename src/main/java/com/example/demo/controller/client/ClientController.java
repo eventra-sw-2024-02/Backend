@@ -1,6 +1,7 @@
 package com.example.demo.controller.client;
 
 import com.example.demo.controller.client.request.ClientRequest;
+import com.example.demo.controller.user.request.LoginRequest;
 import com.example.demo.entity.ClientEntity;
 import com.example.demo.service.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,5 +35,12 @@ public class ClientController {
         Optional<ClientEntity> client = clientService.getClientById(id);
         return client.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<ClientEntity> login(@RequestBody LoginRequest loginRequest) {
+        ClientEntity client = clientService.loginClient(loginRequest);
+        return ResponseEntity.ok(client);
+
     }
 }

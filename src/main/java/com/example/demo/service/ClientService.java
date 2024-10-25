@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 import com.example.demo.controller.client.request.ClientRequest;
+import com.example.demo.controller.user.request.LoginRequest;
 import com.example.demo.entity.ClientEntity;
 import com.example.demo.repository.ClientRepository; // Asegúrate de tener el repositorio
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,4 +38,10 @@ public class ClientService {
     public Optional<ClientEntity> getClientById(Long id) {
         return clientRepository.findById(id);
     }
+
+    public ClientEntity loginClient(LoginRequest loginRequest) {
+        return getClientById(userService.loginUser(loginRequest).getId())
+                .orElseThrow(() -> new IllegalArgumentException("Este usuario no es cliente"));
+    }
+
 }
