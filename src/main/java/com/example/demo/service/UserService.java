@@ -1,7 +1,9 @@
 package com.example.demo.service;
 
 import com.example.demo.controller.user.request.LoginRequest;
+import com.example.demo.entity.ClientEntity;
 import com.example.demo.entity.UserEntity;
+import com.example.demo.entity.enums.UserRole;
 import com.example.demo.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,9 +15,20 @@ import java.util.Optional;
 public class UserService {
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private ClientService clientService;
 
     public UserEntity createUser(UserEntity user) {
-        return userRepository.save(user);
+        UserEntity createdUser = userRepository.save(user);
+        System.out.println("Usuario normal creado con éxito: " + createdUser.getEmail());
+        System.out.println(createdUser.getPassword());
+        if (createdUser.getRole().equals(UserRole.CLIENT)) {
+            System.out.println("Usuario Cliente creado con éxito: " + createdUser.getEmail());
+            ClientEntity client=clientService.createClientwUser(createdUser);
+        }else if (createdUser.getRole().equals(UserRole.BUSINESS)) {
+            //logica para empresas
+        }
+        return createdUser;
     }
 
     public List<UserEntity> getAllUsers() {
@@ -26,15 +39,22 @@ public class UserService {
         return userRepository.findById(id);
     }
 
-    public UserEntity loginUser(LoginRequest loginRequest) {
+    public ClientEntity loginUser(LoginRequest loginRequest) {
         Optional<UserEntity> user= userRepository.findByEmail(loginRequest.email());
         if (user.isEmpty()) { throw new RuntimeException("Email Not Found"); }
         else{
             if (!user.get().getPassword().equals(loginRequest.password())) {
                 throw new RuntimeException("Wrong Password");
+            } else{
+                if (user.get().getRole().equals("CLIENT")) {
+                    return clientService.getClientByUser(user.get().getId()).get();
+                }
+                else if (user.get().getRole().equals("BUSINESS")) {
+                    return null;
+                }
             }
         }
-        return user.get();
+        return null;
     }
 
 }

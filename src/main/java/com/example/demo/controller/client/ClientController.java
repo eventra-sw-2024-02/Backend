@@ -18,11 +18,12 @@ public class ClientController {
     @Autowired
     private ClientService clientService;
 
+    /*
     @PostMapping
     public ResponseEntity<ClientEntity> createClient(@RequestBody ClientRequest clientRequest) {
         ClientEntity createdClient = clientService.createClient(clientRequest);
         return ResponseEntity.ok(createdClient);
-    }
+    }*/
 
     @GetMapping
     public ResponseEntity<List<ClientEntity>> getAllClients() {
@@ -37,10 +38,11 @@ public class ClientController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    /*
     @PostMapping("/login")
     public ResponseEntity<ClientEntity> login(@RequestBody LoginRequest loginRequest) {
         ClientEntity client = clientService.loginClient(loginRequest);
         return ResponseEntity.ok(client);
 
-    }
+    }*/
 }
