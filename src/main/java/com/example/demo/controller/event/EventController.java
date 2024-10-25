@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/events") // Base path para eventos
+@RequestMapping("/api/events") // Base path para eventos
 public class EventController {
 
     @Autowired
