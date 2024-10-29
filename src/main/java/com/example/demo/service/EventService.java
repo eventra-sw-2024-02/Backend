@@ -1,21 +1,14 @@
 package com.example.demo.service;
 
-import com.example.demo.controller.event.request.EventCompleteRequest;
-import com.example.demo.controller.event.request.EventRequest;
-import com.example.demo.controller.event.request.TagRequest;
-import com.example.demo.controller.event.response.EventTagResponse;
-import com.example.demo.controller.event.response.EventTypeResponse;
+
 import com.example.demo.entity.Event;
-import com.example.demo.entity.TagEntity;
 import com.example.demo.repository.EventRepository; // Asegúrate de tener el repositorio
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class EventService {

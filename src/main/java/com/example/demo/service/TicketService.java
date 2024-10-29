@@ -9,6 +9,7 @@ import com.example.demo.repository.TicketRepository; // Asegúrate de tener este
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,6 +52,17 @@ public class TicketService {
             ticketList.add(new TickeSimpleRequest(ticketEntity.getName(),ticketEntity.getColor(),ticketEntity.getQuantity(),ticketEntity.getPrice()));
         }
         return ticketList;
+    }
+
+    public BigDecimal getLowestPrice(Long eventId) {
+        List<TicketsEntity> tickets=ticketRepository.findByEvent_Id(eventId);
+        BigDecimal lowestPrice=tickets.get(0).getPrice();
+        for (TicketsEntity ticketEntity : tickets) {
+            if (ticketEntity.getPrice().compareTo(lowestPrice) < 0) {
+                lowestPrice=ticketEntity.getPrice();
+            }
+        }
+        return lowestPrice;
     }
 
 

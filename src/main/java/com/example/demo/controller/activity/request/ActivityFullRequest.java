@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public record ActivityFullRequest(
+        Long id,
         String name,
         String description,
         String photo,

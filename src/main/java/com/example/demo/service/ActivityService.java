@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 import com.example.demo.controller.activity.request.ActivityFullRequest;
+import com.example.demo.controller.activity.request.ActivityTypeUpdate;
 import com.example.demo.controller.activity.response.ActivityCard;
 import com.example.demo.controller.ticket.request.TickeSimpleRequest;
 import com.example.demo.entity.ActivityEntity;
@@ -11,6 +12,7 @@ import com.example.demo.repository.ActivityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -67,6 +69,7 @@ public class ActivityService {
             List<LocalDateTime> fechas= eventService.getDateAllEventsByActivityId(activity.getId());
             List<String> tags= tagService.getAllTagsByEventId(activity.getId());
             activityFullRequests.add(new ActivityFullRequest(
+                    activity.getId(),
                     activity.getName(),
                     activity.getDescription(),
                     activity.getPhoto(),
@@ -86,6 +89,7 @@ public class ActivityService {
         List<LocalDateTime> fechas= eventService.getDateAllEventsByActivityId(activity.getId());
         List<String> tags= tagService.getAllTagsByEventId(activity.getId());
         ActivityFullRequest actividad =new ActivityFullRequest(
+                activity.getId(),
                 activity.getName(),
                 activity.getDescription(),
                 activity.getPhoto(),
@@ -96,6 +100,39 @@ public class ActivityService {
                 activity.getBusiness().getId()
         );
         return actividad;
+    }
+
+    public List<ActivityCard> getAllCardActivities(ActivityType activityType){
+        List<ActivityEntity> lists = activityRepository.findByActivityType(activityType);
+        List<ActivityCard> activityCards=new ArrayList<>();
+        for (ActivityEntity activity: lists){
+            Long EventId=eventService.getEventId(activity.getId());
+            List<String> tags= tagService.getAllTagsByEventId(activity.getId());
+            BigDecimal price=ticketService.getLowestPrice(EventId);
+            activityCards.add(new ActivityCard(
+                    activity.getId(),
+                    activity.getPhoto(),
+                    activity.getName(),
+                    tags,
+                    price,
+                    activity.getActivityType()
+
+            ));
+        }
+        return activityCards;
+    }
+
+    public ActivityTypeUpdate updateType(ActivityTypeUpdate activityTypeUpdate){
+        List<ActivityEntity> lists = new ArrayList<>();
+        for (Long id: activityTypeUpdate.ids()){
+            lists.add(activityRepository.findById(id).get());
+        }
+
+        for (ActivityEntity activity: lists){
+            activity.setActivityType(activityTypeUpdate.activityType());
+            activityRepository.save(activity);
+        }
+        return activityTypeUpdate;
     }
 
     /*public List<ActivityCard> getAllCardActivities(ActivityType activityType){
