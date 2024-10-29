@@ -21,6 +21,7 @@ public class TicketController {
     @Autowired
     private TicketsNFTService ticketsNFTService;
 
+    /*
     @PostMapping
     public ResponseEntity<TicketsEntity> createTicket(@RequestBody TicketRequest ticketRequest) {
         TicketsEntity createdTicket = ticketService.createTicket(ticketRequest);
@@ -43,5 +44,5 @@ public class TicketController {
     public ResponseEntity<List<TicketNFTResponse>> getTicketsNFTsByTicketId(@PathVariable Long ticketId) {
         List<TicketNFTResponse> ticketNFTResponses = ticketsNFTService.getTicketsNFTsByTicketId(ticketId);
         return ResponseEntity.ok(ticketNFTResponses);
-    }
+    }*/
 }

@@ -1,6 +1,8 @@
 package com.example.demo.service;
 
 import com.example.demo.controller.user.request.LoginRequest;
+import com.example.demo.controller.client.response.ClientResponse;
+import com.example.demo.entity.Business;
 import com.example.demo.entity.ClientEntity;
 import com.example.demo.entity.UserEntity;
 import com.example.demo.entity.enums.UserRole;
@@ -17,18 +19,48 @@ public class UserService {
     private UserRepository userRepository;
     @Autowired
     private ClientService clientService;
+    @Autowired
+    private BusinessService businessService;
 
     public UserEntity createUser(UserEntity user) {
         UserEntity createdUser = userRepository.save(user);
         System.out.println("Usuario normal creado con éxito: " + createdUser.getEmail());
         System.out.println(createdUser.getPassword());
         if (createdUser.getRole().equals(UserRole.CLIENT)) {
-            System.out.println("Usuario Cliente creado con éxito: " + createdUser.getEmail());
-            ClientEntity client=clientService.createClientwUser(createdUser);
+            System.out.println("Usuario Cliente creado con éxito");
+            ClientResponse client=clientService.createClientwUser(createdUser);
         }else if (createdUser.getRole().equals(UserRole.BUSINESS)) {
-            //logica para empresas
+            System.out.println("Usuario Business creado con exito");
+            Business business=businessService.createBusinesswUser(user);
         }
         return createdUser;
+    }
+
+    public Object login(LoginRequest loginRequest){
+        System.out.println("uno");
+        Optional<UserEntity> user= userRepository.findByEmail(loginRequest.email());
+        if (user.isPresent()) {
+            System.out.println("email correcto");
+            if(user.get().getPassword().equals(loginRequest.password())){
+                System.out.println("password correcto");
+                if (user.get().getRole().equals(UserRole.CLIENT)) {
+                    System.out.println("devolviendo al cliente");
+                    return clientService.getClientByUserResponse(user.get().getId());
+                }else if (user.get().getRole().equals(UserRole.BUSINESS)){
+                    System.out.println("devolviendo al negocio");
+                    return businessService.getBusinessResponse(user.get().getId());
+                } else{
+                    System.out.println("devolviendo nada");
+                    return null;
+                }
+            }
+            else{
+                throw new RuntimeException("Wrong Password");
+            }
+        } else {
+            throw new RuntimeException("Email Not Found");
+        }
+
     }
 
     public List<UserEntity> getAllUsers() {

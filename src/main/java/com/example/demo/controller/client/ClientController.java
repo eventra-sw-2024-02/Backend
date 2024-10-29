@@ -1,10 +1,11 @@
 package com.example.demo.controller.client;
 
-import com.example.demo.controller.client.request.ClientRequest;
-import com.example.demo.controller.user.request.LoginRequest;
+import com.example.demo.controller.client.request.ClientUpdateRequest;
+import com.example.demo.controller.client.response.ClientResponse;
 import com.example.demo.entity.ClientEntity;
 import com.example.demo.service.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,8 +27,8 @@ public class ClientController {
     }*/
 
     @GetMapping
-    public ResponseEntity<List<ClientEntity>> getAllClients() {
-        List<ClientEntity> clients = clientService.getAllClients();
+    public ResponseEntity<List<ClientResponse>> getAllClients() {
+        List<ClientResponse> clients = clientService.getAllClients();
         return ResponseEntity.ok(clients);
     }
 
@@ -45,4 +46,16 @@ public class ClientController {
         return ResponseEntity.ok(client);
 
     }*/
+    @PutMapping("/{id}")
+    public ResponseEntity<ClientResponse> updateClient(
+            @PathVariable Long id,
+            @RequestBody ClientUpdateRequest clientUpdateRequest) {
+        try {
+            ClientResponse updatedClient = clientService.updateClient(clientUpdateRequest, id);
+            return ResponseEntity.ok(updatedClient);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null); // Cliente no encontrado
+        }
+    }
+
 }

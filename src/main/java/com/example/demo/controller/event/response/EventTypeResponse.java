@@ -1,8 +1,8 @@
 package com.example.demo.controller.event.response;
 
-import com.example.demo.entity.enums.EventType;
+import com.example.demo.entity.enums.ActivityType;
 
 public record EventTypeResponse (
-        EventType eventType
+        ActivityType activityType
 ) {
 }

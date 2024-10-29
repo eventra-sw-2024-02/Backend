@@ -1,22 +1,25 @@
 package com.example.demo.service;
 
-import com.example.demo.controller.client.request.ClientRequest;
-import com.example.demo.controller.user.request.LoginRequest;
+import com.example.demo.controller.client.request.ClientUpdateRequest;
+import com.example.demo.controller.client.response.ClientResponse;
 import com.example.demo.entity.ClientEntity;
 import com.example.demo.entity.UserEntity;
+import com.example.demo.mapper.ClientMapper;
 import com.example.demo.repository.ClientRepository; // Asegúrate de tener el repositorio
-import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ClientService {
-
     @Autowired
     private ClientRepository clientRepository;
+
+    @Autowired
+    private ClientMapper clientMapper;
 
     /*
     public ClientEntity createClient(ClientRequest clientRequest) {
@@ -32,14 +35,18 @@ public class ClientService {
         return clientRepository.save(client);
     }*/
 
-    public ClientEntity createClientwUser(UserEntity user) {
+    public ClientResponse createClientwUser(UserEntity user) {
         ClientEntity client = new ClientEntity();
         client.setUser(user);
-        return clientRepository.save(client);
+        client=clientRepository.save(client);
+        return clientMapper.toClientResponse(client);
     }
 
-    public List<ClientEntity> getAllClients() {
-        return clientRepository.findAll();
+    public List<ClientResponse> getAllClients() {
+        List<ClientEntity> clients = clientRepository.findAll();
+        return clients.stream()
+                .map(clientMapper::toClientResponse)  // Mapea cada ClientEntity a ClientResponse
+                .collect(Collectors.toList());
     }
 
     public Optional<ClientEntity> getClientById(Long id) {
@@ -51,10 +58,36 @@ public class ClientService {
         return clientRepository.findByUser_Id(id);
     }
 
+    public ClientResponse getClientByUserResponse(Long id) {
+        ClientEntity client=getClientByUser(id).get();
+        return clientMapper.toClientResponse(client);
+    }
+
     /*
     public ClientEntity loginClient(LoginRequest loginRequest) {
         return getClientById(userService.loginUser(loginRequest).getId())
                 .orElseThrow(() -> new IllegalArgumentException("Este usuario no es cliente"));
     }*/
 
+    public ClientResponse updateClient(ClientUpdateRequest clientUpdateRequest, Long id) {
+        Optional<ClientEntity> actualClient= getClientById(id);
+        System.out.println("Cliente buscado");
+        if (actualClient.isPresent()){
+            ClientEntity client=actualClient.get();
+            //update
+            client.setRealName(clientUpdateRequest.realname());
+            client.setBirthDate(clientUpdateRequest.birthday());
+            client.setDni(clientUpdateRequest.dni());
+            client.setCountry(clientUpdateRequest.country());
+            client.setGender(clientUpdateRequest.gender());
+            client.setDirection(clientUpdateRequest.Direction());
+            client.setPhone(clientUpdateRequest.phone());
+            client = clientRepository.save(client);
+            System.out.println("Cliente actualisado");
+            return clientMapper.toClientResponse(client);
+        } else {
+            throw new IllegalArgumentException("Este cliente no existe");
+        }
+
+    }
 }

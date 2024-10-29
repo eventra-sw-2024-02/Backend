@@ -1,9 +1,10 @@
 package com.example.demo.service;
 
-import com.example.demo.controller.business.request.BusinessRequest;
+import com.example.demo.controller.business.response.BusinessResponse;
 import com.example.demo.entity.Business;
+import com.example.demo.entity.UserEntity;
+import com.example.demo.mapper.BusinessMapper;
 import com.example.demo.repository.BusinessRepository; // Asegúrate de tener este repositorio
-import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,10 +17,11 @@ public class BusinessService {
     @Autowired
     private BusinessRepository businessRepository;
     @Autowired
-    private UserService userService;
+    private BusinessMapper businessMapper;
+
 
     // Método para crear un nuevo negocio
-    public Business createBusiness(BusinessRequest businessRequest) {
+    /*public Business createBusiness(BusinessRequest businessRequest) {
 
         Business business = new Business();
         business.setBusinessName(businessRequest.businessName());
@@ -30,6 +32,21 @@ public class BusinessService {
         business.setCategory(businessRequest.category());
         business.setUser(userService.getUserById(businessRequest.userId()).get());
         return businessRepository.save(business);
+    }*/
+
+    public Business createBusinesswUser(UserEntity user) {
+        Business business = new Business();
+        business.setUser(user);
+        return businessRepository.save(business);
+    }
+
+    public BusinessResponse getBusinessResponse(Long id) {
+        Business business = getBusinessByUser(id).get();
+        return businessMapper.toBusinessResponse(business);
+    }
+
+    public Optional<Business> getBusinessByUser(Long id) {
+        return businessRepository.findByUser_Id(id);
     }
 
     // Método para obtener todos los negocios

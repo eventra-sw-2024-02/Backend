@@ -17,6 +17,7 @@ import java.util.Optional;
 @RequestMapping("/api/events") // Base path para eventos
 public class EventController {
 
+    /*
     @Autowired
     private EventService eventService;
 
@@ -68,4 +69,6 @@ public class EventController {
             return ResponseEntity.notFound().build();
         }
     }
+    
+     */
 }

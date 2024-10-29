@@ -9,8 +9,10 @@ import com.example.demo.entity.Event;
 import com.example.demo.entity.TagEntity;
 import com.example.demo.repository.EventRepository; // Asegúrate de tener el repositorio
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -18,29 +20,43 @@ import java.util.Optional;
 @Service
 public class EventService {
 
+
     @Autowired
     private EventRepository eventRepository;
 
-    @Autowired
-    private TagService tagService;
 
+
+    /*
     @Autowired
     private BusinessService businessService; // Para acceder a los negocios
+    */
 
-    public Event createEvent(EventRequest eventRequest) {
-        Event event = new Event();
-        event.setEventName(eventRequest.eventName());
-        event.setEventDescription(eventRequest.eventDescription());
-        event.setEventLocation(eventRequest.eventLocation());
-        event.setPhoto(eventRequest.photo());
-        event.setDateTime(eventRequest.date());
 
-        var business = businessService.getBusinessById(eventRequest.businessId());
-        business.ifPresent(event::setBusiness);
 
+    public Event createEvent(Event event) {
         return eventRepository.save(event);
     }
 
+    public List<Event> getAllEventsByActivityId(Long activityId) {
+        return eventRepository.findByActivity_Id(activityId);
+
+    }
+
+    public List<LocalDateTime> getDateAllEventsByActivityId(Long activityId) {
+        List<Event> events= eventRepository.findByActivity_Id(activityId);
+        List<LocalDateTime> eventList= new ArrayList<>();
+        for(Event event: events) {
+            eventList.add(event.getDateTime());
+        }
+        return eventList;
+    }
+
+    public Long getEventId(Long activityId) {
+        List<Event> events= eventRepository.findByActivity_Id(activityId);
+        return events.getFirst().getId();
+    }
+
+    /*
     public Event createCompleteEvent(EventCompleteRequest eventCompleteRequest) {
         // Crear y guardar el evento primero
         Event event = new Event();
@@ -92,12 +108,14 @@ public class EventService {
         if (optionalEvent.isPresent()) {
             Event event = optionalEvent.get();
             // Aquí puedes actualizar el tipo de evento
-            event.setEventType(eventTypeResponse.eventType()); // Asegúrate de que `setEventType` exista en tu clase `Event`
+            event.setEventType(eventTypeResponse.activityType()); // Asegúrate de que `setEventType` exista en tu clase `Event`
             return eventRepository.save(event); // Guardar el evento actualizado
         } else {
             throw new IllegalArgumentException("Event not found with ID: " + id);
         }
     }
+
+     */
 
 
 }

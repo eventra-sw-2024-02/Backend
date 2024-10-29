@@ -1,6 +1,5 @@
 package com.example.demo.entity;
 
-import com.example.demo.entity.enums.EventType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -20,21 +19,9 @@ public class Event {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private String EventName;
-
     private LocalDateTime dateTime;
 
-    private String EventDescription;
-
-    private String photo;
-
-    @Enumerated(EnumType.STRING)
-    private EventType eventType=EventType.NONE;
-
-    private String EventLocation; // ubicacion maps link
-
     @ManyToOne
-    @JoinColumn(name="business_id",referencedColumnName = "id")
-    private Business business;
+    @JoinColumn(name="activity_id",referencedColumnName = "id")
+    private ActivityEntity activity;
 }

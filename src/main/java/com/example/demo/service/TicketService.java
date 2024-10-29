@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 import com.example.demo.controller.ticket.Response.TicketNFTResponse;
+import com.example.demo.controller.ticket.request.TickeSimpleRequest;
 import com.example.demo.controller.ticket.request.TicketRequest;
 import com.example.demo.entity.TicketsEntity;
 import com.example.demo.entity.TicketsNFT;
@@ -8,6 +9,7 @@ import com.example.demo.repository.TicketRepository; // Asegúrate de tener este
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -16,12 +18,11 @@ public class TicketService {
     @Autowired
     private TicketRepository ticketRepository;
     @Autowired
-    private EventService eventService;
-    @Autowired
     private TicketsNFTService ticketsNFTService;
 
 
-    public TicketsEntity createTicket(TicketRequest ticketRequest) {
+
+    /*public TicketsEntity createTicket(TicketRequest ticketRequest) {
         TicketsEntity ticket = new TicketsEntity();
         ticket.setName(ticketRequest.name());
         ticket.setColor(ticketRequest.color());
@@ -34,8 +35,26 @@ public class TicketService {
 
         return ticket;
     }
+    */
 
 
+    public TicketsEntity createTicket(TicketsEntity ticket) {
+        TicketsEntity ticketsEntity=ticketRepository.save(ticket);
+        //ticketsNFTService.createMultipleTicketsNFTs(ticket);
+        return ticketsEntity;
+    }
+
+    public List<TickeSimpleRequest> getTicketsByEventId(Long eventId) {
+        List<TicketsEntity> tickets=ticketRepository.findByEvent_Id(eventId);
+        List<TickeSimpleRequest> ticketList= new ArrayList<>();
+        for (TicketsEntity ticketEntity : tickets) {
+            ticketList.add(new TickeSimpleRequest(ticketEntity.getName(),ticketEntity.getColor(),ticketEntity.getQuantity(),ticketEntity.getPrice()));
+        }
+        return ticketList;
+    }
+
+
+    /*
     public List<TicketsEntity> getAllTickets() {
         return ticketRepository.findAll();
     }
@@ -48,4 +67,6 @@ public class TicketService {
     public List<TicketNFTResponse> getTicketsNFTsByTicketId(Long ticketId) {
         return ticketsNFTService.getTicketsNFTsByTicketId(ticketId);
     }
+
+     */
 }

@@ -8,5 +8,5 @@ import java.util.List;
 
 @Repository
 public interface TagRepository extends JpaRepository<TagEntity, Long> {
-    List<TagEntity> findByEvent_Id(Long eventId);
+    List<TagEntity> findByActivity_Id(Long eventId);
 }

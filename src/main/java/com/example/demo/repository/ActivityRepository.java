@@ -1,13 +1,12 @@
 package com.example.demo.repository;
 
-import com.example.demo.entity.Event;
+import com.example.demo.entity.ActivityEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface EventRepository extends JpaRepository<Event, Long> {
-    List<Event> findByActivity_Id(Long activityId);
+public interface ActivityRepository extends JpaRepository<ActivityEntity,Long>{
+    Optional<ActivityEntity> findByBusiness_Id(Long id);
 }

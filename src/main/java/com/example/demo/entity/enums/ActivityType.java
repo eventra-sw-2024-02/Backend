@@ -1,6 +1,6 @@
 package com.example.demo.entity.enums;
 
-public enum EventType {
+public enum ActivityType {
     TRENDING,
     DISCOVER,
     FEATURED,

@@ -22,5 +22,5 @@ public class TagEntity {
 
     @ManyToOne
     @JoinColumn(name="event_id",referencedColumnName = "id")
-    private Event event;
+    private ActivityEntity activity;
 }

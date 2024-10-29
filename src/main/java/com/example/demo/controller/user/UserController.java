@@ -1,5 +1,6 @@
 package com.example.demo.controller.user;
 
+import com.example.demo.controller.user.request.LoginRequest;
 import com.example.demo.entity.UserEntity;
 import com.example.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,11 @@ public class UserController {
         return ResponseEntity.ok(createdUser);
     }
 
+    @PostMapping("/login")
+    public ResponseEntity<Object> login(@RequestBody LoginRequest loginRequest) {
+        Object object = userService.login(loginRequest);
+        return ResponseEntity.ok(object);
+    }
 
 
     @GetMapping

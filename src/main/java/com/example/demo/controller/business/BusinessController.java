@@ -17,11 +17,12 @@ public class BusinessController {
     @Autowired
     private BusinessService businessService;
 
+    /*
     @PostMapping
     public ResponseEntity<Business> createBusiness(@RequestBody BusinessRequest businessRequest) {
         Business createdBusiness = businessService.createBusiness(businessRequest);
         return ResponseEntity.ok(createdBusiness);
-    }
+    }*/
 
     @GetMapping
     public ResponseEntity<List<Business>> getAllBusinesses() {

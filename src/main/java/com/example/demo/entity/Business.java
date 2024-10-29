@@ -17,10 +17,8 @@ public class Business {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
     private String businessName;
 
-    @Column(nullable = false)
     private String Ruc;
 
     private String Address;

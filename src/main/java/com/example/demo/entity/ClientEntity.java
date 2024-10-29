@@ -23,6 +23,8 @@ public class ClientEntity {
 
     private LocalDate birthDate;
 
+    private Integer age;
+
     private String dni;
 
     private String country;
