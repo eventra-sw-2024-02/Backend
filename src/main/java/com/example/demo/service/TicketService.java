@@ -12,14 +12,14 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class TicketService {
 
     @Autowired
     private TicketRepository ticketRepository;
-    @Autowired
-    private TicketsNFTService ticketsNFTService;
+
 
 
 
@@ -63,6 +63,10 @@ public class TicketService {
             }
         }
         return lowestPrice;
+    }
+
+    public Optional<TicketsEntity> getTicketById(Long id) {
+        return ticketRepository.findById(id);
     }
 
 

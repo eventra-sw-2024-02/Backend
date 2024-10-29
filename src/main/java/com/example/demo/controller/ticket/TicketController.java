@@ -1,6 +1,7 @@
 package com.example.demo.controller.ticket;
 
 import com.example.demo.controller.ticket.Response.TicketNFTResponse;
+import com.example.demo.controller.ticket.request.BuyInTicketRequest;
 import com.example.demo.controller.ticket.request.TicketRequest;
 import com.example.demo.entity.TicketsEntity;
 import com.example.demo.entity.TicketsNFT;
@@ -21,13 +22,13 @@ public class TicketController {
     @Autowired
     private TicketsNFTService ticketsNFTService;
 
-    /*
-    @PostMapping
-    public ResponseEntity<TicketsEntity> createTicket(@RequestBody TicketRequest ticketRequest) {
-        TicketsEntity createdTicket = ticketService.createTicket(ticketRequest);
+
+    @PostMapping("/buy")
+    public ResponseEntity<TicketsNFT> createBuyInTicket(@RequestBody BuyInTicketRequest ticketRequest) {
+        TicketsNFT createdTicket = ticketsNFTService.createTicketsNFT(ticketRequest);
         return ResponseEntity.ok(createdTicket);
     }
-
+/*
     @GetMapping
     public ResponseEntity<List<TicketsEntity>> getAllTickets() {
         List<TicketsEntity> tickets = ticketService.getAllTickets();

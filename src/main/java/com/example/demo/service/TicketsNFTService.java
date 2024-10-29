@@ -1,12 +1,17 @@
 package com.example.demo.service;
 
 import com.example.demo.controller.ticket.Response.TicketNFTResponse;
+import com.example.demo.controller.ticket.request.BuyInTicketRequest;
 import com.example.demo.entity.TicketsEntity;
 import com.example.demo.entity.TicketsNFT;
+import com.example.demo.entity.TransactionEntity;
+import com.example.demo.repository.TicketRepository;
 import com.example.demo.repository.TicketsNFTRepository; // Asegúrate de tener este repositorio
+import com.example.demo.repository.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,9 +20,35 @@ public class TicketsNFTService {
 
     @Autowired
     private TicketsNFTRepository ticketsNFTRepository;
+    @Autowired
+    private TicketService ticketService;
+    @Autowired
+    private TicketRepository ticketRepository;
+    @Autowired
+    private ClientService clientService;
+    @Autowired
+    private TransactionRepository transactionRepository;
 
-    public TicketsNFT createTicketsNFT(TicketsNFT ticketsNFT) {
-        return ticketsNFTRepository.save(ticketsNFT);
+
+    public TicketsNFT createTicketsNFT(BuyInTicketRequest buyInTicketRequest) {
+        TicketsEntity ticket = ticketService.getTicketById(buyInTicketRequest.idTicket()).orElseThrow(() -> new RuntimeException("Ticket not found"));;
+        if (ticket.getActualquantity() >= ticket.getQuantity()) {
+            throw new RuntimeException("No tickets available");
+        }else {
+            ticket.setActualquantity(ticket.getActualquantity() + 1);
+            ticketRepository.save(ticket);
+            TicketsNFT ticketsNFT = new TicketsNFT();
+            ticketsNFT.setTicket(ticket);
+            ticketsNFT.setClient(clientService.getClientById(buyInTicketRequest.idClient()).get());
+            ticketsNFT=ticketsNFTRepository.save(ticketsNFT);
+            TransactionEntity transactionEntity=new TransactionEntity();
+            transactionEntity.setTicketId(ticketsNFT.getTicket().getId());
+            transactionEntity.setMethodPayment(buyInTicketRequest.methodPayment());
+            BigDecimal price = ticketsNFT.getTicket().getPrice().multiply(new BigDecimal("0.15"));
+            transactionEntity.setFee(price);
+            transactionRepository.save(transactionEntity);
+            return ticketsNFT;
+        }
     }
 
     public List<TicketsNFT> getAllTicketsNFTs() {
