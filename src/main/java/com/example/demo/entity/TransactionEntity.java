@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Table(name="transactions")
 @Getter
@@ -29,5 +30,12 @@ public class TransactionEntity {
 
     private Long ticketId;
 
+    private LocalDateTime dateTime;
+
     private BigDecimal fee;
+
+    @PrePersist
+    public void prePersist(){
+        this.dateTime = LocalDateTime.now();
+    }
 }
