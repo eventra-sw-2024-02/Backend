@@ -31,7 +31,7 @@ public class TicketsNFT {
     private TicketsEntity ticket;
 
     @ManyToOne
-    @JoinColumn(name="user_id",referencedColumnName = "id")
+    @JoinColumn(name="client_id",referencedColumnName = "id")
     private ClientEntity client;
 
     @PrePersist

@@ -42,7 +42,7 @@ public class TicketsNFTService {
             ticketsNFT.setClient(clientService.getClientById(buyInTicketRequest.idClient()).get());
             ticketsNFT=ticketsNFTRepository.save(ticketsNFT);
             TransactionEntity transactionEntity=new TransactionEntity();
-            transactionEntity.setTicketId(ticketsNFT.getTicket().getId());
+            transactionEntity.setTicketNftId(ticketsNFT.getId());
             transactionEntity.setMethodPayment(buyInTicketRequest.methodPayment());
             BigDecimal price = ticketsNFT.getTicket().getPrice().multiply(new BigDecimal("0.15"));
             transactionEntity.setFee(price);

@@ -4,5 +4,6 @@ public enum ActivityType {
     TRENDING,
     DISCOVER,
     FEATURED,
-    NONE
+    NONE,
+    PASS
 }

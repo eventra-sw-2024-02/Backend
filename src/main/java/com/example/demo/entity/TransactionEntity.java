@@ -28,7 +28,7 @@ public class TransactionEntity {
     @Enumerated(EnumType.STRING)
     private TransactionStatus transactionStatus = TransactionStatus.APPROVED;
 
-    private Long ticketId;
+    private Long ticketNftId;
 
     private LocalDateTime dateTime;
 
