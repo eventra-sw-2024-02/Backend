@@ -12,8 +12,8 @@ services:
   eventra-mysql:
     image: mysql:latest
     environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: password
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: eventra_backend
     ports:
       - "3306:3306"
     volumes:
